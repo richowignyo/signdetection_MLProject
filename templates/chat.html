@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+<!-- Fitur Section -->
+<section class="bg-gradient-to-br from-blue-50 to-white py-16 min-h-screen">
+  <div class="container mx-auto px-6 space-y-10" data-aos="fade-up">
+
+    <!-- Heading & Description -->
+    <div class="text-center space-y-3">
+      <h1 class="text-4xl font-extrabold text-blue-700">🎥 Penerjemah Bahasa Isyarat Real-Time</h1>
+      <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+        Sistem ini menerjemahkan gerakan bahasa isyarat menjadi teks secara otomatis menggunakan teknologi webcam dan kecerdasan buatan.
+      </p>
+    </div>
+
+    <!-- Content Layout: Webcam & Transcription Side by Side -->
+    <div class="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto" data-aos="zoom-in">
+
+      <!-- Webcam Preview -->
+      <div id="webcam-container" class="bg-white p-6 rounded-3xl shadow-xl border-2 border-blue-100 w-full lg:w-1/2 relative">
+        <p class="text-blue-700 font-bold text-xl mb-3">📡 Webcam Aktif:</p>
+        <video id="webcam" autoplay playsinline muted class="rounded-xl w-full border shadow-md"></video>
+        <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 hidden">
+          <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Transcription Output -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2">
+        <h2 class="text-blue-700 font-bold text-xl mb-3">Transkripsi Gesture:</h2>
+        <div id="transcription-output" class="text-lg text-gray-800 h-64 overflow-y-auto p-3 bg-gray-50 border rounded-lg shadow-inner">
+          <p class="text-gray-400">Teks hasil deteksi akan tampil di sini...</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="flex gap-4 justify-center mt-4" data-aos="fade-up">
+      <button id="start-transcribe" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 focus:ring-4 focus:ring-blue-300">
+        Mulai Transkripsi
+      </button>
+      <button id="stop-transcribe" class="bg-gray-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-700 transition transform hover:scale-105">
+        Stop
+      </button>
+      <button id="reset-transcribe" class="bg-yellow-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-600 transition transform hover:scale-105">
+        Mulai Ulang
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 400, once: true });</script>
+<script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+
+{% endblock %}

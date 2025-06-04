@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+<!-- Hero Section -->
+<section class="bg-[#f0f5ff] text-blue-900 py-20" data-aos="fade-up">
+  <div class="container mx-auto px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between">
+    <div class="max-w-xl space-y-6" data-aos="fade-right">
+      <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">
+        Komunikasi Inklusif & Real-Time<br>
+        <span class="text-blue-700">untuk Teman Tuli</span>
+      </h1>
+      <p class="text-lg text-blue-800">
+        Platform <strong>BERSAMA</strong> menghadirkan solusi penerjemahan Bahasa Isyarat <strong>Bisindo</strong> secara otomatis melalui kamera webcam. Mewujudkan komunikasi dua arah yang instan dan efisien tanpa penerjemah manusia.
+      </p>
+      <a href="{{ url_for('chat') }}" class="w-auto inline-block bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-800 transition transform active:scale-95 focus:ring-4 focus:ring-blue-300 ">
+         Mulai Sekarang
+      </a>
+    </div>
+    <div class="mt-12 lg:mt-0" data-aos="fade-left">
+      <img src="{{ url_for('static', filename='avatar/bg landingpage.png') }}"
+          alt="Sign Language AI"
+          class="w-[520px] max-w-full lg:w-[600px] xl:w-[700px] object-contain" />
+    </div>
+  </div>
+</section>
+<!-- Divider -->
+<div class="h-px bg-blue-200 my-10 mx-auto w-3/4"></div>
+
+<!-- Keunggulan Utama -->
+<section class="bg-[#f0f5ff] py-20" data-aos="fade-up">
+  <div class="container mx-auto px-6 lg:px-20 text-center">
+    <h2 class="text-3xl font-bold mb-12 text-blue-800" data-aos="zoom-in">Keunggulan Platform</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <!-- Real-Time -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4 transition duration-200 transform hover:scale-105 active:scale-110 cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex justify-center">
+          <img src="{{ url_for('static', filename='avatar/prediksi.png') }}" alt="Realtime Icon" class="w-20 h-20">
+        </div>
+        <h3 class="text-xl font-semibold text-blue-800">Prediksi Real-Time</h3>
+        <p class="text-sm text-gray-600">
+          Proses deteksi dilakukan per frame secara otomatis, tanpa perlu interaksi manual.
+        </p>
+      </div>
+
+      <!-- Akurasi -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4 transition duration-200 transform hover:scale-105 active:scale-110 cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex justify-center">
+          <img src="{{ url_for('static', filename='avatar/logo akura.png') }}" alt="Accuracy Icon" class="w-20 h-20">
+        </div>
+        <h3 class="text-xl font-semibold text-blue-800">Akurasi Tinggi</h3>
+        <p class="text-sm text-gray-600">
+          Model ML dilatih khusus untuk Bahasa Isyarat Indonesia dengan akurasi 90%+.
+        </p>
+      </div>
+
+      <!-- Tanpa Hambatan -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4 transition duration-200 transform hover:scale-105 active:scale-110 cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+        <div class="flex justify-center">
+          <img src="{{ url_for('static', filename='avatar/aksesibilitas.png') }}" alt="Accessibility Icon" class="w-20 h-20">
+        </div>
+        <h3 class="text-xl font-semibold text-blue-800">Aksesibilitas Mudah</h3>
+        <p class="text-sm text-gray-600">
+          Tidak perlu instalasi tambahan. Jalankan langsung di browser modern dari laptop Anda.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 1000, once: true });</script>
+
+{% endblock %}

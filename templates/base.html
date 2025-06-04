@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BERSAMA</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/download.png') }}" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen bg-white text-gray-900">
+
+  <!-- Header -->
+  <header class="bg-white border-b shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-1 py-4 flex items-center justify-between">
+      
+      <!-- Logo + Nama -->
+      <a href="{{ url_for('home') }}" class="flex items-center space-x-3 group">
+        <img src="{{ url_for('static', filename='avatar/logg.png') }}" alt="Logo" class="h-10 w-10 transform group-hover:scale-105 transition duration-200" />
+        <div class="w-px h-8 bg-gray-300"></div>
+        <span class="text-2xl font-extrabold text-blue-800 tracking-wide group-hover:text-blue-900 transition duration-200">BERSAMA</span>
+      </a>
+
+
+      <!-- Nav -->
+      <nav class="flex space-x-8 text-sm font-semibold text-blue-600">
+        <a href="{{ url_for('home') }}" class="hover:underline">Home</a>
+        <a href="{{ url_for('bisindo') }}" class="hover:underline">Bisindo Information</a>
+        <a href="{{ url_for('about') }}" class="hover:underline">About Us</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    {% block body %}
+    <section class="h-[60vh] flex flex-col justify-center items-center bg-gradient-to-br from-white to-blue-50 text-center">
+      <h2 class="text-4xl font-bold text-blue-600">Selamat Datang di BERSAMA</h2>
+      <p class="mt-4 max-w-xl text-gray-600">Meningkatkan komunikasi inklusif antara penyandang tunarungu dan masyarakat umum.</p>
+    </section>
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white text-gray-500 text-center py-4 border-t">
+    <p class="text-sm">&copy; 2025 BERSAMA. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

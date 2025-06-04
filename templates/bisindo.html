@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+<!-- Bisindo Section: Injected for Variation -->
+<section class="bg-white py-20" data-aos="fade-up">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold text-blue-800 mb-6">Bisindo Information</h2>
+    <p class="text-gray-600 mb-10 text-sm max-w-2xl mx-auto">
+      Berikut adalah representasi visual dari alfabet Bahasa Isyarat Indonesia (BISINDO). Setiap gambar menunjukkan bentuk tangan untuk masing-masing huruf A–Z.
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+      <div class="bg-blue-50 rounded-xl shadow hover:shadow-md p-4 flex flex-col items-center transition transform hover:-translate-y-1 hover:scale-105" data-aos="zoom-in" data-aos-delay="{{ loop.index * 40 }}">
+        <img src="{{ url_for('static', filename='avatar/' ~ letter ~ '.jpg') }}" alt="Isyarat {{ letter }}" class="w-24 h-24 object-contain mb-2 rounded">
+        <p class="text-blue-800 font-semibold text-lg">{{ letter }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 1000, once: true });</script>
+
+{% endblock %}
