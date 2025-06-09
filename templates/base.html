@@ -27,12 +27,12 @@
         <span class="text-2xl font-extrabold text-blue-800 tracking-wide group-hover:text-blue-900 transition duration-200">BERSAMA</span>
       </a>
 
-
       <!-- Nav -->
-      <nav class="flex space-x-8 text-sm font-semibold text-blue-600">
-        <a href="{{ url_for('home') }}" class="hover:underline">Home</a>
-        <a href="{{ url_for('bisindo') }}" class="hover:underline">Bisindo Information</a>
-        <a href="{{ url_for('about') }}" class="hover:underline">About Us</a>
+      <nav class="flex space-x-8 text-sm font-semibold text-blue-800">
+        <a href="{{ url_for('home') }}" class="hover:text-blue-600 transition">Home</a>
+        <a href="{{ url_for('chat') }}" class="hover:text-blue-600 transition">Transkripsi</a>
+        <a href="{{ url_for('bisindo') }}" class="hover:text-blue-600 transition">Bisindo Information</a>
+        <a href="{{ url_for('about') }}" class="hover:text-blue-600 transition">About Us</a>
       </nav>
     </div>
   </header>
@@ -40,10 +40,6 @@
   <!-- Main Content -->
   <main class="flex-1">
     {% block body %}
-    <section class="h-[60vh] flex flex-col justify-center items-center bg-gradient-to-br from-white to-blue-50 text-center">
-      <h2 class="text-4xl font-bold text-blue-600">Selamat Datang di BERSAMA</h2>
-      <p class="mt-4 max-w-xl text-gray-600">Meningkatkan komunikasi inklusif antara penyandang tunarungu dan masyarakat umum.</p>
-    </section>
     {% endblock %}
   </main>
 
