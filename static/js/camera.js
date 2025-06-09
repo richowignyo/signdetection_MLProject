@@ -118,7 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
       }
-    }, 2500); // ~2.5 detik
+    }, 4000);
   }
 
   function sendVideo(videoBlob) {
