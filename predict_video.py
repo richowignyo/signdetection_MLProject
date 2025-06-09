@@ -22,8 +22,11 @@ cnn_model = Model(inputs=base_cnn.input, outputs=base_cnn.output)
 
 # Urutan label sesuai training
 LABELS = [
-    'Apa Kabar', 'Baik', 'Halo', 'Kami', 'Kamu',
-    'Saya', 'Selamat Pagi', 'Selamat Siang', 'Selamat Sore', 'Terima Kasih'
+    'Apa', 'Apa Kabar', 'Bagaimana', 'Baik', 'Belajar', 'Berapa', 'Berdiri', 'Bingung', 'Dia',
+    'Dimana', 'Duduk', 'Halo', 'Kalian', 'Kami', 'Kamu', 'Kapan', 'Kemana', 'Kita', 'Makan', 'Mandi',
+    'Marah', 'Melihat', 'Membaca', 'Menulis', 'Mereka', 'Minum', 'Pendek', 'Ramah', 'Sabar', 
+    'Saya', 'Sedih', 'Selamat Malam', 'Selamat Pagi', 'Selamat Siang', 'Selamat Sore', 'Senang', 'Siapa', 'Terima Kasih',
+    'Tidur', 'Tinggi' 
 ]
 
 def extract_features_from_video(video_path, max_frames=SEQUENCE_LENGTH):
