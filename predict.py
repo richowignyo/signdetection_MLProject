@@ -1,41 +1,75 @@
+# predict.py (FIXED: sinkronisasi preprocessing)
 import cv2
 import numpy as np
 import mediapipe as mp
 from tensorflow.keras.models import load_model
+import pickle
 
-# Load trained model
-model = load_model("model/fcnn_bisindo_final.h5")
+# Load models
+model_1hand = load_model("model/model_1hand.h5")
+model_2hand = load_model("model/model_2hand.h5")
 
-# Setup MediaPipe
+# Load label encoders
+with open("model/label_encoder_1hand.pkl", "rb") as f:
+    le_1 = pickle.load(f)
+with open("model/label_encoder_2hand.pkl", "rb") as f:
+    le_2 = pickle.load(f)
+
+# Setup MediaPipe (real-time friendly)
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(static_image_mode=True, max_num_hands=1)
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.7)
+mp_drawing = mp.solutions.drawing_utils
 
-# Label mapping (0 -> A, ..., 25 -> Z)
-label_map = [chr(i) for i in range(65, 91)]
+# Enhancement used in training
+def enhance_image(img):
+    img = cv2.resize(img, (480, 480))
+    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+    l, a, b = cv2.split(lab)
+    l_eq = cv2.equalizeHist(l)
+    enhanced = cv2.merge((l_eq, a, b))
+    return cv2.cvtColor(enhanced, cv2.COLOR_LAB2BGR)
 
 def predict_image(image_path):
     image = cv2.imread(image_path)
     if image is None:
         return None
+
+    image = enhance_image(image)
     img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    result = hands.process(img_rgb)
+    results = hands.process(img_rgb)
 
-    if result.multi_hand_landmarks:
-        lm = result.multi_hand_landmarks[0].landmark
-        wrist = lm[0]
-        coords = np.array([[pt.x - wrist.x, pt.y - wrist.y] for pt in lm])
-        max_val = np.max(np.abs(coords))
-        coords = coords / max_val if max_val != 0 else coords
-        vec = coords.flatten().reshape(1, -1).astype("float32")
+    if not results.multi_hand_landmarks:
+        return None
 
-        pred = model.predict(vec)[0]
-        pred_idx = np.argmax(pred)
-        confidence = float(pred[pred_idx])
-        if confidence < 0.8:
-            return None  # skip prediksi tidak yakin
-        return label_map[pred_idx], confidence
+    landmarks = results.multi_hand_landmarks
+    num_hands = len(landmarks)
+    print(f"[DEBUG] Jumlah tangan terdeteksi: {num_hands}")
+
+    all_coords = []
+    for hand_landmarks in landmarks:
+        for lm in hand_landmarks.landmark:
+            all_coords.extend([lm.x, lm.y])
+
+    vec = np.array(all_coords).reshape(1, -1).astype("float32")
+    print(f"[DEBUG] Input shape: {vec.shape}")
+
+    if num_hands == 1 and vec.shape[1] == 42:
+        pred = model_1hand.predict(vec, verbose=0)[0]
+        label = le_1.inverse_transform([np.argmax(pred)])[0]
+        conf = float(np.max(pred))
+        if conf < 0.5:
+            return None
+        return label, conf
+
+    elif num_hands == 2 and vec.shape[1] == 84:
+        pred = model_2hand.predict(vec, verbose=0)[0]
+        label = le_2.inverse_transform([np.argmax(pred)])[0]
+        conf = float(np.max(pred))
+        if conf < 0.5:
+            return None
+        return label, conf
+
     return None
 
-# Example usage:
-# result = predict_image("static/uploads/test.jpg")
-# print(result)  # ('C', 0.91)
+def fallback_predict_image(image_path):
+    return predict_image(image_path)

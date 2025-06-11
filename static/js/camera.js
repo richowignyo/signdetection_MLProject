@@ -1,10 +1,6 @@
-// static/js/camera.js
-
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 let captureInterval;
-let mediaRecorder;
-let recordedBlobs = [];
 let videoElem;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -22,23 +18,18 @@ window.addEventListener('DOMContentLoaded', () => {
       startWebcam().then(() => {
         streamStarted = true;
         showCountdown(() => {
-          startRecording();
-          captureInterval = setInterval(startRecording, 3000);
+          captureInterval = setInterval(captureImageSnapshot, 1000);
         });
       });
     } else {
       showCountdown(() => {
-        startRecording();
-        captureInterval = setInterval(startRecording, 3000);
+        captureInterval = setInterval(captureImageSnapshot, 1000);
       });
     }
   });
 
   stopBtn.addEventListener("click", () => {
     clearInterval(captureInterval);
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      mediaRecorder.stop();
-    }
   });
 
   resetBtn.addEventListener("click", () => {
@@ -91,63 +82,12 @@ window.addEventListener('DOMContentLoaded', () => {
       } else {
         clearInterval(countdown);
         countdownOverlay.style.display = 'none';
-        callback(); // jalankan fungsi setelah countdown selesai
+        callback();
       }
     }, 1000);
   }
 
-  function startRecording() {
-    recordedBlobs = [];
-    const stream = videoElem.srcObject;
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data && event.data.size > 0) {
-        recordedBlobs.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      const superBuffer = new Blob(recordedBlobs, { type: 'video/webm' });
-      sendVideo(superBuffer);
-    };
-
-    mediaRecorder.start();
-
-    setTimeout(() => {
-      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-        mediaRecorder.stop();
-      }
-    }, 4000);
-  }
-
-  function sendVideo(videoBlob) {
-    spinner.classList.remove("hidden");
-    const formData = new FormData();
-    formData.append('video', videoBlob, 'gesture.webm');
-
-    fetch('/predict-video', {
-      method: 'POST',
-      body: formData
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.label) {
-          appendTranscription(data.label);
-        } else {
-          captureImageFallback();
-        }
-      })
-      .catch(err => {
-        console.error('Prediction video error:', err);
-        captureImageFallback();
-      })
-      .finally(() => {
-        spinner.classList.add("hidden");
-      });
-  }
-
-  function captureImageFallback() {
+  function captureImageSnapshot() {
     canvas.width = videoElem.videoWidth;
     canvas.height = videoElem.videoHeight;
     ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
@@ -156,26 +96,44 @@ window.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData();
       formData.append('image', blob, 'frame.jpg');
 
+      spinner.classList.remove("hidden");
+
       fetch('/predict', {
         method: 'POST',
         body: formData
       })
         .then(res => res.json())
         .then(data => {
+          console.log("[📦 Response]", data);
           if (data.label) {
             appendTranscription(data.label);
+          } else if (data.error) {
+            console.warn("[⚠️ Prediction Warning]", data.error);
+            appendErrorHint(data.error);
           }
         })
-        .catch(err => console.error('Fallback image error:', err));
+        .catch(err => {
+          console.error('Snapshot prediction error:', err);
+        })
+        .finally(() => {
+          spinner.classList.add("hidden");
+        });
     }, 'image/jpeg');
   }
 
   function appendTranscription(text) {
     const output = document.getElementById('transcription-output');
-    if (output.innerText.includes("Teks hasil deteksi")) {
+    if (output.innerText.includes("Teks hasil deteksi akan tampil di sini")) {
       output.innerText = '';
     }
     output.textContent += ' ' + text;
     output.scrollTop = output.scrollHeight;
+  }
+
+  function appendErrorHint(msg) {
+    const output = document.getElementById('transcription-output');
+    if (output.innerText.trim() === "" || output.innerText.includes("Teks hasil deteksi")) {
+      output.innerText = "⛔ " + msg;
+    }
   }
 });
