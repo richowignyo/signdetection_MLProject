@@ -18,12 +18,12 @@ window.addEventListener('DOMContentLoaded', () => {
       startWebcam().then(() => {
         streamStarted = true;
         showCountdown(() => {
-          captureInterval = setInterval(captureImageSnapshot, 1000);
+          captureInterval = setInterval(captureImageSnapshot, 3000);
         });
       });
     } else {
       showCountdown(() => {
-        captureInterval = setInterval(captureImageSnapshot, 1000);
+        captureInterval = setInterval(captureImageSnapshot, 3000);
       });
     }
   });
@@ -107,9 +107,11 @@ window.addEventListener('DOMContentLoaded', () => {
           console.log("[📦 Response]", data);
           if (data.label) {
             appendTranscription(data.label);
+            hideWebcamWarning(); // ✅ Hapus warning jika sukses
           } else if (data.error) {
             console.warn("[⚠️ Prediction Warning]", data.error);
             appendErrorHint(data.error);
+            showWebcamWarning(data.error); // ⚠️ Munculkan warning
           }
         })
         .catch(err => {
@@ -134,6 +136,25 @@ window.addEventListener('DOMContentLoaded', () => {
     const output = document.getElementById('transcription-output');
     if (output.innerText.trim() === "" || output.innerText.includes("Teks hasil deteksi")) {
       output.innerText = "⛔ " + msg;
+    }
+  }
+
+  function showWebcamWarning(msg) {
+    const warning = document.getElementById("webcam-warning");
+    if (!warning) return;
+
+    warning.innerText = msg;
+    warning.classList.remove("hidden");
+
+    setTimeout(() => {
+      warning.classList.add("hidden");
+    }, 5000);
+  }
+
+  function hideWebcamWarning() {
+    const warning = document.getElementById("webcam-warning");
+    if (warning) {
+      warning.classList.add("hidden");
     }
   }
 });

@@ -2,6 +2,24 @@
 
 {% block body %}
 
+<!-- ⚠️ Warning Overlay Style -->
+<style>
+  #webcam-warning {
+    position: absolute;
+    top: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    z-index: 1001;
+    font-size: 1rem;
+    display: none;
+  }
+</style>
+
 <!-- AOS CSS -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
@@ -22,6 +40,7 @@
 
       <!-- Webcam Preview -->
       <div id="webcam-container" class="bg-white p-6 rounded-3xl shadow-xl border-2 border-blue-100 w-full lg:w-1/2 relative">
+        <div id="webcam-warning">⚠️ Warning error</div> <!-- 🔔 Overlay warning -->
         <p class="text-blue-700 font-bold text-xl mb-3">Webcam Aktif:</p>
         <video id="webcam" autoplay playsinline muted class="rounded-xl w-full border shadow-md"></video>
         <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 hidden">

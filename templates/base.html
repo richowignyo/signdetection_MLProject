@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BERSAMA</title>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -17,9 +18,9 @@
 <body class="flex flex-col min-h-screen bg-white text-gray-900">
 
   <!-- Header -->
-  <header class="bg-white border-b shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-1 py-4 flex items-center justify-between">
-      
+  <header class="bg-white border-b shadow-sm sticky top-0 z-50" x-data="{ open: false }">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+
       <!-- Logo + Nama -->
       <a href="{{ url_for('home') }}" class="flex items-center space-x-3 group">
         <img src="{{ url_for('static', filename='avatar/logg.png') }}" alt="Logo" class="h-10 w-10 transform group-hover:scale-105 transition duration-200" />
@@ -27,13 +28,28 @@
         <span class="text-2xl font-extrabold text-blue-800 tracking-wide group-hover:text-blue-900 transition duration-200">BERSAMA</span>
       </a>
 
-      <!-- Nav -->
-      <nav class="flex space-x-8 text-sm font-semibold text-blue-800">
+      <!-- Hamburger Menu (Mobile) -->
+      <button @click="open = !open" class="md:hidden focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <!-- Nav Links -->
+      <nav class="hidden md:flex space-x-8 text-sm font-semibold text-blue-800">
         <a href="{{ url_for('home') }}" class="hover:text-blue-600 transition">Home</a>
         <a href="{{ url_for('chat') }}" class="hover:text-blue-600 transition">Transkripsi</a>
         <a href="{{ url_for('bisindo') }}" class="hover:text-blue-600 transition">Bisindo Information</a>
         <a href="{{ url_for('about') }}" class="hover:text-blue-600 transition">About Us</a>
       </nav>
+    </div>
+
+    <!-- Dropdown Menu (Mobile Only) -->
+    <div x-show="open" x-transition class="md:hidden px-4 pb-4 space-y-2">
+      <a href="{{ url_for('home') }}" class="block text-blue-800 font-semibold hover:text-blue-600">Home</a>
+      <a href="{{ url_for('chat') }}" class="block text-blue-800 font-semibold hover:text-blue-600">Transkripsi</a>
+      <a href="{{ url_for('bisindo') }}" class="block text-blue-800 font-semibold hover:text-blue-600">Bisindo Information</a>
+      <a href="{{ url_for('about') }}" class="block text-blue-800 font-semibold hover:text-blue-600">About Us</a>
     </div>
   </header>
 

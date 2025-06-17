@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 import os
 from werkzeug.utils import secure_filename
@@ -36,14 +35,24 @@ def predict():
     file.save(path)
 
     result = predict_image(path)
-    if result is None:
-        result = fallback_predict_image(path)
 
-    if result is None:
+    if isinstance(result, tuple):
+        label, confidence = result
+        os.remove(path)
+        return jsonify({'label': label, 'confidence': round(confidence, 2)})
+
+    elif isinstance(result, str):
+        os.remove(path)
+        return jsonify({'error': result}), 200
+
+    result = fallback_predict_image(path)
+    os.remove(path)
+
+    if isinstance(result, tuple):
+        label, confidence = result
+        return jsonify({'label': label, 'confidence': round(confidence, 2)})
+    else:
         return jsonify({'error': 'No hand detected or confidence too low'}), 200
-
-    label, confidence = result
-    return jsonify({'label': label, 'confidence': round(confidence, 2)})
 
 if __name__ == '__main__':
     app.run(debug=True)
