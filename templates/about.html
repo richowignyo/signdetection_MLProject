@@ -4,53 +4,284 @@
 <!-- AOS CSS -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
+<style>
+  .about-section {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 30%, #f0f5ff 70%, #fdf4ff 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  
+  .content-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid transparent;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .content-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+    transition: left 0.6s;
+  }
+  
+  .content-card:hover::before {
+    left: 100%;
+  }
+  
+  .content-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+    transform: translateY(-5px);
+  }
+  
+  .team-card {
+    background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .team-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.6s;
+  }
+  
+  .team-card:hover::before {
+    left: 100%;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+  }
+  
+  .team-card:hover .team-name {
+    color: #3b82f6;
+  }
+  
+  .team-card:hover .team-info {
+    color: #1d4ed8;
+  }
+  
+  .divider-enhanced {
+    background: linear-gradient(to right, transparent, #3b82f6, transparent);
+    height: 2px;
+    position: relative;
+  }
+  
+  .divider-enhanced::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  }
+  
+  .text-highlight {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+  
+  .floating-decoration {
+    position: absolute;
+    opacity: 0.1;
+    animation: float-decoration 6s ease-in-out infinite;
+  }
+  
+  @keyframes float-decoration {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  
+  .section-title {
+    background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    border-radius: 2px;
+  }
+</style>
+
 <!-- Tentang Kami + Tim Pengembang dalam satu section -->
-<section class="bg-white text-blue-900 min-h-screen pt-32 pb-12" data-aos="fade-up">
-  <div class="container mx-auto px-6 space-y-12">
+<section class="about-section text-blue-900 min-h-screen pt-36 pb-16 relative" data-aos="fade-up">
+  <!-- Floating decorations -->
+  <div class="floating-decoration top-20 left-10 text-6xl">🎓</div>
+  <div class="floating-decoration top-40 right-20 text-5xl" style="animation-delay: 2s;">💡</div>
+  <div class="floating-decoration bottom-40 left-1/4 text-4xl" style="animation-delay: 4s;">🚀</div>
+  
+  <div class="container mx-auto px-6 space-y-16 relative z-10">
 
-    <!-- Tentang Kami -->
-    <div class="max-w-3xl mx-auto space-y-8">
-      <h2 class="text-4xl font-bold text-blue-800 text-center">Tentang Kami</h2>
-      <p class="text-xl text-justify">
-        <strong>BERSAMA</strong> adalah platform berbasis web yang dikembangkan untuk menerjemahkan Bahasa Isyarat <strong>Bisindo</strong> ke dalam bentuk teks secara real-time melalui kamera webcam.
-        Sistem ini dirancang khusus untuk mengenali gerakan tangan secara <strong>huruf per huruf</strong>, dengan bantuan teknologi <strong>Machine Learning</strong>.
-      </p>
-      <p class="text-xl text-justify">
-        Kami percaya bahwa teknologi harus inklusif dan memberikan akses yang setara bagi seluruh lapisan masyarakat, khususnya komunitas Tuli.
-      </p>
+    <!-- Enhanced Tentang Kami -->
+    <div class="max-w-4xl mx-auto">
+      <div class="content-card p-12 rounded-3xl shadow-2xl space-y-10">
+        <h2 class="section-title text-5xl font-bold text-center mb-8">Tentang Kami</h2>
+        
+        <div class="space-y-8 text-lg leading-relaxed">
+          <p class="text-justify">
+            <strong class="text-highlight">BERSAMA</strong> adalah platform berbasis web yang dikembangkan untuk menerjemahkan Bahasa Isyarat 
+            <strong class="text-highlight">Bisindo</strong> ke dalam bentuk teks secara real-time melalui kamera webcam.
+            Sistem ini dirancang khusus untuk mengenali gerakan tangan secara <strong class="bg-blue-100 px-3 py-1 rounded-lg">huruf per huruf</strong>, 
+            dengan bantuan teknologi <strong class="text-highlight">Machine Learning</strong>.
+          </p>
+          
+          <div class="bg-blue-50 p-8 rounded-2xl border-l-4 border-blue-500">
+            <p class="text-justify italic">
+              Kami percaya bahwa teknologi harus inklusif dan memberikan akses yang setara bagi seluruh lapisan masyarakat, 
+              khususnya komunitas Tuli. Melalui BERSAMA, kami berharap dapat menjembatani komunikasi dan menciptakan dunia yang lebih inklusif.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <!-- Divider -->
-      <div class="h-px bg-blue-200 my-10 mx-auto w-3/4"></div>
+    <!-- Enhanced Divider -->
+    <div class="relative py-12">
+      <div class="divider-enhanced mx-auto w-3/4"></div>
+    </div>
 
-      <!-- Tim Pengembang -->
-      <div class="space-y-4 mt-8">
-        <h3>Tim Pengembang <strong>BERSAMA</strong>:</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm space-x-4" data-aos="fade-up" data-aos-delay="100">
-            <div>
-              <p class="font-semibold text-sm text-blue-800">RICHO WIGNYO AJI SAPUTRA</p>
-              <p class="text-xs text-gray-600">Universitas Airlangga - 164221013</p>
+    <!-- Enhanced Tim Pengembang -->
+    <div class="max-w-6xl mx-auto">
+      <div class="content-card p-12 rounded-3xl shadow-2xl">
+        <h3 class="section-title text-4xl font-bold text-center mb-12">
+          Tim Pengembang <span class="text-highlight">BERSAMA</span>
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="team-card p-8 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="100">
+            <div class="flex items-center space-x-6">
+              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                R
+              </div>
+              <div class="flex-1">
+                <p class="team-name font-bold text-lg text-blue-800 mb-1">RICHO WIGNYO AJI SAPUTRA</p>
+                <p class="team-info text-sm text-gray-600">Universitas Airlangga - 164221013</p>
+                <div class="mt-2 flex items-center space-x-2">
+                  <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <span class="text-xs text-blue-600 font-medium">Lead Developer</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm space-x-4" data-aos="fade-up" data-aos-delay="200">
-            <div>
-              <p class="font-semibold text-sm text-blue-800">AHMAD ZULFIKAR AL GHIFFARI</p>
-              <p class="text-xs text-gray-600">Universitas Airlangga - 164221116</p>
+          <div class="team-card p-8 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-center space-x-6">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                A
+              </div>
+              <div class="flex-1">
+                <p class="team-name font-bold text-lg text-blue-800 mb-1">AHMAD ZULFIKAR AL GHIFFARI</p>
+                <p class="team-info text-sm text-gray-600">Universitas Airlangga - 164221116</p>
+                <div class="mt-2 flex items-center space-x-2">
+                  <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span class="text-xs text-green-600 font-medium">ML Engineer</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm space-x-4" data-aos="fade-up" data-aos-delay="300">
-            <div>
-              <p class="font-semibold text-sm text-blue-800">AMIRA NAILA ZANIRA</p>
-              <p class="text-xs text-gray-600">Universitas Airlangga - 164221100</p>
+          <div class="team-card p-8 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="300">
+            <div class="flex items-center space-x-6">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                A
+              </div>
+              <div class="flex-1">
+                <p class="team-name font-bold text-lg text-blue-800 mb-1">AMIRA NAILA ZANIRA</p>
+                <p class="team-info text-sm text-gray-600">Universitas Airlangga - 164221100</p>
+                <div class="mt-2 flex items-center space-x-2">
+                  <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                  <span class="text-xs text-purple-600 font-medium">UI/UX Designer</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm space-x-4" data-aos="fade-up" data-aos-delay="400">
-            <div>
-              <p class="font-semibold text-sm text-blue-800">OLGA KABSYAH RAMADHANI</p>
-              <p class="text-xs text-gray-600">Universitas Airlangga - 164221120</p>
+          <div class="team-card p-8 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="400">
+            <div class="flex items-center space-x-6">
+              <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                O
+              </div>
+              <div class="flex-1">
+                <p class="team-name font-bold text-lg text-blue-800 mb-1">OLGA KABSYAH RAMADHANI</p>
+                <p class="team-info text-sm text-gray-600">Universitas Airlangga - 164221120</p>
+                <div class="mt-2 flex items-center space-x-2">
+                  <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                  <span class="text-xs text-orange-600 font-medium">Data Scientist</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Enhanced Mission Statement -->
+        <div class="mt-16 p-8 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl border-2 border-blue-200" data-aos="fade-up" data-aos-delay="500">
+          <div class="text-center space-y-4">
+            <h4 class="text-2xl font-bold text-blue-800 flex items-center justify-center space-x-3">
+              <span class="text-3xl">🎯</span>
+              <span>Misi Kami</span>
+            </h4>
+            <p class="text-gray-700 leading-relaxed max-w-3xl mx-auto">
+              Menciptakan teknologi yang dapat membantu komunitas Tuli Indonesia berkomunikasi dengan lebih mudah dan efektif, 
+              serta meningkatkan kesadaran masyarakat tentang pentingnya aksesibilitas digital.
+            </p>
+            <div class="flex justify-center space-x-6 mt-6">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-blue-600">2025</div>
+                <div class="text-xs text-gray-500">Tahun Pengembangan</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-600">4</div>
+                <div class="text-xs text-gray-500">Anggota Tim</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-purple-600">∞</div>
+                <div class="text-xs text-gray-500">Dampak Positif</div>
+              </div>
             </div>
           </div>
         </div>
@@ -62,6 +293,40 @@
 
 <!-- AOS JS -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 800, once: true });</script>
+<script>
+AOS.init({ 
+  duration: 1000, 
+  once: true, 
+  offset: 100,
+  easing: 'ease-out-cubic'
+});
+
+// Enhanced interactions
+document.addEventListener('DOMContentLoaded', function() {
+  // Add hover effects to team cards
+  const teamCards = document.querySelectorAll('.team-card');
+  
+  teamCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-8px) scale(1.03) rotateY(2deg)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = '';
+    });
+  });
+  
+  // Add parallax effect to floating decorations
+  window.addEventListener('scroll', function() {
+    const scrolled = window.pageYOffset;
+    const decorations = document.querySelectorAll('.floating-decoration');
+    
+    decorations.forEach((decoration, index) => {
+      const speed = 0.5 + (index * 0.1);
+      decoration.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+    });
+  });
+});
+</script>
 
 {% endblock %}
