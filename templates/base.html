@@ -3,65 +3,140 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BERSAMA</title>
+  <title>BERSAMA - Penerjemah Bahasa Isyarat</title>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/download.png') }}" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 50%;
+      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .logo-glow {
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+      transition: all 0.3s ease;
+    }
+    
+    .logo-glow:hover {
+      filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.5));
+      transform: scale(1.05);
+    }
+    
+    .mobile-menu {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(59, 130, 246, 0.1);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
     }
   </style>
 </head>
-<body class="flex flex-col min-h-screen bg-white text-gray-900">
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900">
 
   <!-- Header -->
-  <header class="bg-white border-b shadow-sm sticky top-0 z-50" x-data="{ open: false }">
+  <header class="glass-effect border-b border-blue-100 shadow-lg sticky top-0 z-50" x-data="{ open: false }">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
       <!-- Logo + Nama -->
-      <a href="{{ url_for('home') }}" class="flex items-center space-x-3 group">
-        <img src="{{ url_for('static', filename='avatar/logg.png') }}" alt="Logo" class="h-10 w-10 transform group-hover:scale-105 transition duration-200" />
-        <div class="w-px h-8 bg-gray-300"></div>
-        <span class="text-2xl font-extrabold text-blue-800 tracking-wide group-hover:text-blue-900 transition duration-200">BERSAMA</span>
+      <a href="{{ url_for('home') }}" class="flex items-center space-x-4 group">
+        <img src="{{ url_for('static', filename='avatar/logg.png') }}" alt="Logo BERSAMA" class="h-12 w-12 logo-glow" />
+        <div class="w-px h-10 bg-gradient-to-b from-blue-300 to-blue-600"></div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent tracking-wide">BERSAMA</span>
+          <span class="text-xs text-blue-600 font-medium -mt-1">Bisindo Translator</span>
+        </div>
       </a>
 
       <!-- Hamburger Menu (Mobile) -->
-      <button @click="open = !open" class="md:hidden focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <button @click="open = !open" class="md:hidden focus:outline-none p-2 rounded-lg hover:bg-blue-50 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800 transition-transform" :class="{ 'rotate-90': open }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
 
       <!-- Nav Links -->
-      <nav class="hidden md:flex space-x-8 text-sm font-semibold text-blue-800">
-        <a href="{{ url_for('home') }}" class="hover:text-blue-600 transition">Home</a>
-        <a href="{{ url_for('chat') }}" class="hover:text-blue-600 transition">Transkripsi</a>
-        <a href="{{ url_for('bisindo') }}" class="hover:text-blue-600 transition">Bisindo Information</a>
-        <a href="{{ url_for('about') }}" class="hover:text-blue-600 transition">About Us</a>
+      <nav class="hidden md:flex space-x-8 text-sm font-semibold">
+        <a href="{{ url_for('home') }}" class="nav-link text-blue-800 hover:text-blue-600 px-2 py-1">Home</a>
+        <a href="{{ url_for('chat') }}" class="nav-link text-blue-800 hover:text-blue-600 px-2 py-1">Transkripsi</a>
+        <a href="{{ url_for('bisindo') }}" class="nav-link text-blue-800 hover:text-blue-600 px-2 py-1">Bisindo Guide</a>
+        <a href="{{ url_for('about') }}" class="nav-link text-blue-800 hover:text-blue-600 px-2 py-1">About Us</a>
       </nav>
     </div>
 
     <!-- Dropdown Menu (Mobile Only) -->
-    <div x-show="open" x-transition class="md:hidden px-4 pb-4 space-y-2">
-      <a href="{{ url_for('home') }}" class="block text-blue-800 font-semibold hover:text-blue-600">Home</a>
-      <a href="{{ url_for('chat') }}" class="block text-blue-800 font-semibold hover:text-blue-600">Transkripsi</a>
-      <a href="{{ url_for('bisindo') }}" class="block text-blue-800 font-semibold hover:text-blue-600">Bisindo Information</a>
-      <a href="{{ url_for('about') }}" class="block text-blue-800 font-semibold hover:text-blue-600">About Us</a>
+    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="md:hidden mobile-menu px-4 pb-4 space-y-3">
+      <a href="{{ url_for('home') }}" class="block text-blue-800 font-semibold hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors">🏠 Home</a>
+      <a href="{{ url_for('chat') }}" class="block text-blue-800 font-semibold hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors">🎥 Transkripsi</a>
+      <a href="{{ url_for('bisindo') }}" class="block text-blue-800 font-semibold hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors">👋 Bisindo Guide</a>
+      <a href="{{ url_for('about') }}" class="block text-blue-800 font-semibold hover:text-blue-600 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors">👥 About Us</a>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="flex-1">
+  <main class="flex-1 animate-fade-in-up">
     {% block body %}
     {% endblock %}
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white text-gray-500 text-center py-4 border-t">
-    <p class="text-sm">&copy; 2025 BERSAMA. All rights reserved.</p>
+  <footer class="glass-effect text-gray-600 text-center py-6 border-t border-blue-100 mt-auto">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
+        <p class="text-sm font-medium">&copy; 2025 BERSAMA - Bahasa Isyarat Indonesia Translator</p>
+        <div class="flex items-center space-x-4 text-xs text-gray-500">
+          <span>Made with ❤️ for accessibility</span>
+          <span>•</span>
+          <span>Universitas Airlangga</span>
+        </div>
+      </div>
+    </div>
   </footer>
 
 </body>

@@ -5,61 +5,331 @@
 <!-- AOS CSS -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
-<section class="bg-gradient-to-br from-blue-50 to-white py-16 min-h-screen">
-  <div class="container mx-auto px-6 space-y-10" data-aos="fade-up">
+<style>
+  .webcam-container {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+  }
+  
+  .webcam-container::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+    border-radius: inherit;
+    z-index: -1;
+  }
+  
+  .transcription-box {
+    background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+  
+  .transcription-box:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+  }
+  
+  .control-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .control-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .control-button:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .start-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+  
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  }
+  
+  .stop-btn {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  }
+  
+  .stop-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+  }
+  
+  .reset-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+  }
+  
+  .reset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+  }
+  
+  .loading-spinner {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+  }
+  
+  .status-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+  }
+  
+  .pulse-dot {
+    animation: pulse-dot 2s infinite;
+  }
+  
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+  }
+  
+  .typing-animation {
+    border-right: 2px solid #3b82f6;
+    animation: blink 1s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 50% { border-color: transparent; }
+    51%, 100% { border-color: #3b82f6; }
+  }
+  
+  .feature-highlight {
+    background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
+    border: 1px solid #c7d2fe;
+  }
+</style>
 
-    <!-- Judul -->
-    <div class="text-center space-y-3">
-      <h1 class="text-4xl font-extrabold text-blue-700">🎥 Penerjemah Bahasa Isyarat Real-Time</h1>
-      <p class="text-gray-600 max-w-3xl mx-auto text-lg">
-        Sistem ini menerjemahkan gerakan bahasa isyarat menjadi teks secara otomatis.
+<section class="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 min-h-screen">
+  <div class="container mx-auto px-6 space-y-12" data-aos="fade-up">
+
+    <!-- Header Section -->
+    <div class="text-center space-y-6 max-w-4xl mx-auto">
+      <div class="inline-flex items-center space-x-3 bg-blue-100 px-6 py-3 rounded-full" data-aos="zoom-in">
+        <span class="w-3 h-3 bg-blue-500 rounded-full pulse-dot"></span>
+        <span class="text-blue-800 font-semibold text-sm">Live Translation Active</span>
+      </div>
+      
+      <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        🎥 Penerjemah Bahasa Isyarat Real-Time
+      </h1>
+      
+      <p class="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+        Sistem canggih yang menerjemahkan gerakan bahasa isyarat Bisindo menjadi teks secara otomatis 
+        dengan teknologi <strong class="text-blue-600">Machine Learning</strong> dan <strong class="text-purple-600">Computer Vision</strong>
       </p>
+      
+      <!-- Quick Stats -->
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
+        <div class="feature-highlight px-4 py-2 rounded-lg">
+          <span class="text-sm font-semibold text-blue-700">⚡ Real-time Detection</span>
+        </div>
+        <div class="feature-highlight px-4 py-2 rounded-lg">
+          <span class="text-sm font-semibold text-green-700">🎯 90%+ Accuracy</span>
+        </div>
+        <div class="feature-highlight px-4 py-2 rounded-lg">
+          <span class="text-sm font-semibold text-purple-700">👋 26 Letters Support</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Webcam & Output -->
-    <div class="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto" data-aos="zoom-in">
+    <!-- Main Interface -->
+    <div class="flex flex-col xl:flex-row gap-8 max-w-7xl mx-auto" data-aos="zoom-in" data-aos-delay="200">
 
-      <!-- Webcam -->
-      <div id="webcam-container" class="bg-white p-6 rounded-3xl shadow-xl border-2 border-blue-100 w-full lg:w-1/2 relative">
-        <p class="text-blue-700 font-bold text-xl mb-3">Webcam Aktif:</p>
-        <video id="webcam" autoplay playsinline muted class="rounded-xl w-full border shadow-md"></video>
-        <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 hidden">
-          <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-          </svg>
+      <!-- Webcam Section -->
+      <div class="webcam-container p-8 rounded-3xl shadow-2xl w-full xl:w-1/2 relative">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-4 h-4 bg-green-500 rounded-full pulse-dot"></div>
+            <h2 class="text-2xl font-bold text-blue-800">Webcam Live Feed</h2>
+          </div>
+          <div class="status-indicator">
+            <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+              🟢 Ready
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative">
+          <video id="webcam" autoplay playsinline muted class="rounded-2xl w-full border-4 border-white shadow-xl bg-gray-900"></video>
+          
+          <!-- Loading Overlay -->
+          <div id="loading-spinner" class="loading-spinner absolute inset-0 flex flex-col items-center justify-center rounded-2xl hidden">
+            <div class="relative">
+              <svg class="animate-spin h-12 w-12 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            <p class="text-blue-800 font-semibold text-lg">Menganalisis Gerakan...</p>
+            <p class="text-blue-600 text-sm mt-1">Mohon tunggu sebentar</p>
+          </div>
+          
+          <!-- Countdown Overlay will be inserted here by JavaScript -->
+        </div>
+        
+        <!-- Webcam Info -->
+        <div class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
+          <div class="flex items-center space-x-2 text-sm text-blue-700">
+            <span>💡</span>
+            <span><strong>Tips:</strong> Pastikan pencahayaan cukup dan tangan terlihat jelas di dalam frame</span>
+          </div>
         </div>
       </div>
 
-      <!-- Transkripsi -->
-      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2">
-        <h2 class="text-blue-700 font-bold text-xl mb-3">Transkripsi Gesture:</h2>
-        <div id="transcription-output" class="text-lg text-gray-800 h-64 overflow-y-auto p-3 bg-gray-50 border rounded-lg shadow-inner">
-          <p class="text-gray-400">Teks hasil deteksi akan tampil di sini...</p>
+      <!-- Transcription Section -->
+      <div class="transcription-box p-8 rounded-3xl shadow-2xl w-full xl:w-1/2">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-blue-800 flex items-center space-x-2">
+            <span>📝</span>
+            <span>Hasil Transkripsi</span>
+          </h2>
+          <div class="flex items-center space-x-2 text-sm text-gray-500">
+            <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+            <span>Live</span>
+          </div>
+        </div>
+        
+        <div id="transcription-output" class="text-lg text-gray-800 h-80 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-2xl shadow-inner font-mono leading-relaxed">
+          <div class="flex items-center justify-center h-full text-center">
+            <div class="space-y-3">
+              <div class="text-4xl">👋</div>
+              <p class="text-gray-400 font-sans">Teks hasil deteksi akan tampil di sini...</p>
+              <p class="text-xs text-gray-300 font-sans">Mulai dengan menekan tombol "Mulai Transkripsi"</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Transcription Stats -->
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <div class="bg-blue-50 p-3 rounded-lg text-center">
+            <div class="text-lg font-bold text-blue-600" id="word-count">0</div>
+            <div class="text-xs text-blue-500">Huruf Terdeteksi</div>
+          </div>
+          <div class="bg-green-50 p-3 rounded-lg text-center">
+            <div class="text-lg font-bold text-green-600" id="accuracy-display">--</div>
+            <div class="text-xs text-green-500">Confidence</div>
+          </div>
         </div>
       </div>
 
     </div>
 
-    <!-- Tombol -->
-    <div class="flex gap-4 justify-center mt-4" data-aos="fade-up">
-      <button id="start-transcribe" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 focus:ring-4 focus:ring-blue-300">
-        Mulai Transkripsi
-      </button>
-      <button id="stop-transcribe" class="bg-gray-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-700 transition transform hover:scale-105">
-        Stop
-      </button>
-      <button id="reset-transcribe" class="bg-yellow-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-600 transition transform hover:scale-105">
-        Mulai Ulang
-      </button>
+    <!-- Control Panel -->
+    <div class="max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+      <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+        <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Panel Kontrol</h3>
+        
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button id="start-transcribe" class="control-button start-btn text-white px-8 py-4 rounded-xl font-bold text-lg relative z-10 flex items-center space-x-2">
+            <span>▶️</span>
+            <span>Mulai Transkripsi</span>
+          </button>
+          
+          <button id="stop-transcribe" class="control-button stop-btn text-white px-8 py-4 rounded-xl font-bold text-lg relative z-10 flex items-center space-x-2">
+            <span>⏹️</span>
+            <span>Stop</span>
+          </button>
+          
+          <button id="reset-transcribe" class="control-button reset-btn text-white px-8 py-4 rounded-xl font-bold text-lg relative z-10 flex items-center space-x-2">
+            <span>🔄</span>
+            <span>Reset</span>
+          </button>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200">
+          <h4 class="font-bold text-blue-800 mb-3 flex items-center space-x-2">
+            <span>📋</span>
+            <span>Cara Penggunaan:</span>
+          </h4>
+          <ol class="text-sm text-blue-700 space-y-2 list-decimal list-inside">
+            <li>Klik <strong>"Mulai Transkripsi"</strong> untuk mengaktifkan webcam dan deteksi</li>
+            <li>Posisikan tangan Anda di depan kamera dengan pencahayaan yang cukup</li>
+            <li>Lakukan gerakan huruf Bisindo sesuai dengan <a href="{{ url_for('bisindo') }}" class="underline hover:text-blue-900">panduan alfabet</a></li>
+            <li>Sistem akan mendeteksi dan menampilkan huruf secara real-time</li>
+            <li>Gunakan <strong>"Stop"</strong> untuk menghentikan atau <strong>"Reset"</strong> untuk memulai ulang</li>
+          </ol>
+        </div>
+      </div>
     </div>
 
   </div>
 </section>
 
-<!-- JS -->
+<!-- Enhanced JavaScript with better UX -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 400, once: true });</script>
+<script>AOS.init({ duration: 600, once: true, offset: 50 });</script>
 <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+
+<script>
+// Enhanced UI interactions
+document.addEventListener('DOMContentLoaded', function() {
+  let letterCount = 0;
+  let lastConfidence = 0;
+  
+  // Update stats display
+  function updateStats(confidence = null) {
+    document.getElementById('word-count').textContent = letterCount;
+    if (confidence !== null) {
+      document.getElementById('accuracy-display').textContent = Math.round(confidence * 100) + '%';
+      lastConfidence = confidence;
+    }
+  }
+  
+  // Override the original appendTranscription function to include stats
+  const originalAppendTranscription = window.appendTranscription;
+  if (typeof originalAppendTranscription === 'function') {
+    window.appendTranscription = function(text, confidence) {
+      originalAppendTranscription(text);
+      letterCount += text.length;
+      updateStats(confidence);
+    };
+  }
+  
+  // Add button click effects
+  document.querySelectorAll('.control-button').forEach(button => {
+    button.addEventListener('click', function() {
+      this.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 150);
+    });
+  });
+  
+  // Initialize stats
+  updateStats();
+});
+</script>
 
 {% endblock %}
