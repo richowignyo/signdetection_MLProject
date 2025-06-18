@@ -15,19 +15,26 @@
       </h1>
       <p class="text-lg text-blue-800 text-justify">
         Dengan <strong>BERSAMA</strong> <strong>Bisindo</strong>, setiap gerakan tangan di depan webcam akan dikenali sebagai <strong>huruf per huruf</strong> dari alfabet bahasa isyarat Bisindo. Sistem ini secara otomatis membentuk teks real-time tanpa memerlukan penerjemah manusia.
-
       </p>
-      <a href="{{ url_for('chat') }}" class="w-auto inline-block bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition transform hover:scale-105 focus:ring-4 focus:ring-blue-300 ">
-         Mulai Sekarang
-      </a>
+      <div class="flex gap-4">
+        <a href="{{ url_for('chat') }}"
+           class="inline-flex items-center gap-2 bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition transform hover:scale-105 focus:ring-4 focus:ring-blue-300">
+          ▶ Mulai Sekarang
+        </a>
+        <a href="{{ url_for('bisindo') }}"
+           class="inline-flex items-center gap-2 border border-blue-500 text-blue-700 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition transform hover:scale-105">
+          Pelajari Bisindo →
+        </a>
+      </div>
     </div>
     <div class="mt-12 lg:mt-0" data-aos="fade-left">
       <img src="{{ url_for('static', filename='avatar/bg landingpage.png') }}"
-          alt="Sign Language AI"
-          class="w-[520px] max-w-full lg:w-[600px] xl:w-[700px] object-contain" />
+           alt="Sign Language AI"
+           class="w-[520px] max-w-full lg:w-[600px] xl:w-[700px] object-contain" />
     </div>
   </div>
 </section>
+
 <!-- Divider -->
 <div class="h-px bg-blue-200 my-10 mx-auto w-3/4"></div>
 
@@ -71,6 +78,22 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="h-px bg-blue-200 my-10 mx-auto w-3/4"></div>
+
+<!-- CTA Section -->
+<section class="bg-blue-50 py-20 text-blue-800" data-aos="fade-up">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl lg:text-4xl font-extrabold mb-4">Siap Mencoba Pengalaman Baru?</h2>
+    <p class="mb-8 text-lg max-w-2xl mx-auto">
+      Jelajahi bagaimana sistem ini mengenali gerakan alfabet Bisindo satu per satu dalam bentuk huruf. Rasakan pengalaman transformasi isyarat menjadi teks secara nyata!
+    </p>
+    <a href="{{ url_for('chat') }}" class="inline-flex items-center gap-2 bg-white text-blue-800 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition transform hover:scale-105">
+      ▶ Coba Sekarang Gratis
+    </a>
   </div>
 </section>
 
