@@ -5,246 +5,8 @@
 <!-- AOS CSS -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
-<style>
-  .webcam-container {
-    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-    border: 3px solid transparent;
-    background-clip: padding-box;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .webcam-container::before {
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4, #10b981);
-    border-radius: inherit;
-    z-index: -1;
-    animation: border-glow 3s ease-in-out infinite;
-  }
-  
-  @keyframes border-glow {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-  
-  .transcription-box {
-    background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
-    border: 2px solid #e2e8f0;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .transcription-box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.05), transparent);
-    transition: left 0.8s;
-  }
-  
-  .transcription-box:hover::before {
-    left: 100%;
-  }
-  
-  .transcription-box:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  .control-button {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    transform-style: preserve-3d;
-  }
-  
-  .control-button::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.8s, height 0.8s;
-  }
-  
-  .control-button:hover::before {
-    width: 400px;
-    height: 400px;
-  }
-  
-  .start-btn {
-    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-  }
-  
-  .start-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5);
-  }
-  
-  .stop-btn {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-  }
-  
-  .stop-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(239, 68, 68, 0.5);
-  }
-  
-  .reset-btn {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-  }
-  
-  .reset-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(245, 158, 11, 0.5);
-  }
-  
-  .loading-spinner {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-  }
-  
-  .status-indicator {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 10;
-  }
-  
-  .pulse-dot {
-    animation: pulse-dot 2s infinite;
-  }
-  
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.2); }
-  }
-  
-  .typing-animation {
-    border-right: 3px solid #3b82f6;
-    animation: blink 1.2s infinite;
-  }
-  
-  @keyframes blink {
-    0%, 50% { border-color: transparent; }
-    51%, 100% { border-color: #3b82f6; }
-  }
-  
-  .feature-highlight {
-    background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 50%, #fef3c7 100%);
-    border: 1px solid #c7d2fe;
-    transition: all 0.3s ease;
-  }
-  
-  .feature-highlight:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-  }
-  
-  .webcam-frame {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .webcam-frame::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 4px solid rgba(255, 255, 255, 0.8);
-    border-radius: inherit;
-    pointer-events: none;
-    box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1);
-  }
-  
-  .transcription-output {
-    background: linear-gradient(145deg, #f8fafc 0%, #ffffff 100%);
-    transition: all 0.3s ease;
-  }
-  
-  .transcription-output:hover {
-    background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%);
-  }
-  
-  .stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  
-  .stat-card {
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s;
-  }
-  
-  .stat-card:hover::before {
-    left: 100%;
-  }
-  
-  .stat-card:hover {
-    transform: translateY(-2px);
-  }
-  
-  .control-panel {
-    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-    border: 2px solid #e2e8f0;
-    transition: all 0.3s ease;
-  }
-  
-  .control-panel:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.1);
-  }
-  
-  .instructions-box {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f5ff 100%);
-    border: 2px solid #bfdbfe;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .instructions-box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
-  }
-</style>
+<section class="bg-gradient-to-br from-blue-50 to-white py-16 min-h-screen">
+  <div class="container mx-auto px-6 space-y-10" data-aos="fade-up">
 
     <!-- Judul -->
     <div class="text-center space-y-3">
@@ -252,253 +14,52 @@
       <p class="text-gray-600 max-w-3xl mx-auto text-lg">
         Sistem ini menerjemahkan gerakan huruf bahasa isyarat menjadi teks secara otomatis.
       </p>
-      
-      <!-- Enhanced Quick Stats -->
-      <div class="flex flex-wrap justify-center gap-8 mt-12">
-        <div class="feature-highlight px-6 py-3 rounded-xl shadow-md">
-          <span class="text-sm font-semibold text-blue-700">⚡ Real-time Detection</span>
-        </div>
-        <div class="feature-highlight px-6 py-3 rounded-xl shadow-md">
-          <span class="text-sm font-semibold text-green-700">🎯 90%+ Accuracy</span>
-        </div>
-        <div class="feature-highlight px-6 py-3 rounded-xl shadow-md">
-          <span class="text-sm font-semibold text-purple-700">👋 26 Letters Support</span>
-        </div>
-      </div>
     </div>
 
-    <!-- Enhanced Main Interface -->
-    <div class="flex flex-col xl:flex-row gap-12 max-w-7xl mx-auto" data-aos="zoom-in" data-aos-delay="200">
+    <!-- Webcam & Output -->
+    <div class="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto" data-aos="zoom-in">
 
-      <!-- Enhanced Webcam Section -->
-      <div class="webcam-container p-10 rounded-3xl shadow-2xl w-full xl:w-1/2 relative">
-        <div class="flex items-center justify-between mb-8">
-          <div class="flex items-center space-x-4">
-            <div class="w-5 h-5 bg-green-500 rounded-full pulse-dot"></div>
-            <h2 class="text-2xl font-bold text-blue-800">Webcam Live Feed</h2>
-          </div>
-          <div class="status-indicator">
-            <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold shadow-md">
-              🟢 Ready
-            </div>
-          </div>
-        </div>
-        
-        <div class="relative webcam-frame">
-          <video id="webcam" autoplay playsinline muted class="rounded-2xl w-full border-4 border-white shadow-xl bg-gray-900"></video>
-          
-          <!-- Enhanced Loading Overlay -->
-          <div id="loading-spinner" class="loading-spinner absolute inset-0 flex flex-col items-center justify-center rounded-2xl hidden">
-            <div class="relative mb-6">
-              <svg class="animate-spin h-16 w-16 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-              </svg>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-            <p class="text-blue-800 font-semibold text-xl mb-2">Menganalisis Gerakan...</p>
-            <p class="text-blue-600 text-sm">Mohon tunggu sebentar</p>
-          </div>
-          
-          <!-- Countdown Overlay will be inserted here by JavaScript -->
-        </div>
-        
-        <!-- Enhanced Webcam Info -->
-        <div class="mt-6 p-6 bg-blue-50 rounded-2xl border-2 border-blue-200">
-          <div class="flex items-start space-x-3 text-sm text-blue-700">
-            <span class="text-lg">💡</span>
-            <div>
-              <p class="font-semibold mb-1">Tips untuk hasil terbaik:</p>
-              <ul class="space-y-1 text-xs">
-                <li>• Pastikan pencahayaan cukup dan merata</li>
-                <li>• Posisikan tangan di tengah frame</li>
-                <li>• Hindari background yang terlalu ramai</li>
-              </ul>
-            </div>
-          </div>
+      <!-- Webcam -->
+      <div id="webcam-container" class="bg-white p-6 rounded-3xl shadow-xl border-2 border-blue-100 w-full lg:w-1/2 relative">
+        <p class="text-blue-700 font-bold text-xl mb-3">Webcam Aktif:</p>
+        <video id="webcam" autoplay playsinline muted class="rounded-xl w-full border shadow-md"></video>
+        <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 hidden">
+          <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
         </div>
       </div>
 
-      <!-- Enhanced Transcription Section -->
-      <div class="transcription-box p-10 rounded-3xl shadow-2xl w-full xl:w-1/2">
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="text-2xl font-bold text-blue-800 flex items-center space-x-3">
-            <span>📝</span>
-            <span>Hasil Transkripsi</span>
-          </h2>
-          <div class="flex items-center space-x-3 text-sm text-gray-500">
-            <span class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></span>
-            <span class="font-medium">Live</span>
-          </div>
-        </div>
-        
-        <div id="transcription-output" class="transcription-output text-lg text-gray-800 h-80 overflow-y-auto p-8 border-2 border-gray-200 rounded-2xl shadow-inner font-mono leading-relaxed">
-          <div class="flex items-center justify-center h-full text-center">
-            <div class="space-y-4">
-              <div class="text-5xl">👋</div>
-              <p class="text-gray-400 font-sans text-lg">Teks hasil deteksi akan tampil di sini...</p>
-              <p class="text-sm text-gray-300 font-sans">Mulai dengan menekan tombol "Mulai Transkripsi"</p>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Enhanced Transcription Stats -->
-        <div class="stats-grid mt-6">
-          <div class="stat-card bg-blue-50 p-4 rounded-xl text-center shadow-md">
-            <div class="text-xl font-bold text-blue-600" id="word-count">0</div>
-            <div class="text-xs text-blue-500 font-medium">Huruf Terdeteksi</div>
-          </div>
-          <div class="stat-card bg-green-50 p-4 rounded-xl text-center shadow-md">
-            <div class="text-xl font-bold text-green-600" id="accuracy-display">--</div>
-            <div class="text-xs text-green-500 font-medium">Confidence</div>
-          </div>
+      <!-- Transkripsi -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2">
+        <h2 class="text-blue-700 font-bold text-xl mb-3">Transkripsi Gesture:</h2>
+        <div id="transcription-output" class="text-lg text-gray-800 h-64 overflow-y-auto p-3 bg-gray-50 border rounded-lg shadow-inner">
+          <p class="text-gray-400">Teks hasil deteksi akan tampil di sini...</p>
         </div>
       </div>
 
     </div>
 
-    <!-- Enhanced Control Panel -->
-    <div class="max-w-5xl mx-auto" data-aos="fade-up" data-aos-delay="400">
-      <div class="control-panel p-10 rounded-3xl shadow-xl">
-        <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Panel Kontrol</h3>
-        
-        <div class="flex flex-wrap gap-6 justify-center">
-          <button id="start-transcribe" class="control-button start-btn text-white px-10 py-5 rounded-2xl font-bold text-lg relative z-10 flex items-center space-x-3 shadow-lg">
-            <span>▶️</span>
-            <span>Mulai Transkripsi</span>
-          </button>
-          
-          <button id="stop-transcribe" class="control-button stop-btn text-white px-10 py-5 rounded-2xl font-bold text-lg relative z-10 flex items-center space-x-3 shadow-lg">
-            <span>⏹️</span>
-            <span>Stop</span>
-          </button>
-          
-          <button id="reset-transcribe" class="control-button reset-btn text-white px-10 py-5 rounded-2xl font-bold text-lg relative z-10 flex items-center space-x-3 shadow-lg">
-            <span>🔄</span>
-            <span>Reset</span>
-          </button>
-        </div>
-        
-        <!-- Enhanced Instructions -->
-        <div class="instructions-box mt-12 p-8 rounded-2xl">
-          <h4 class="font-bold text-blue-800 mb-4 flex items-center space-x-3 text-lg">
-            <span>📋</span>
-            <span>Cara Penggunaan:</span>
-          </h4>
-          <ol class="text-sm text-blue-700 space-y-3 list-decimal list-inside leading-relaxed">
-            <li>Klik <strong>"Mulai Transkripsi"</strong> untuk mengaktifkan webcam dan deteksi</li>
-            <li>Posisikan tangan Anda di depan kamera dengan pencahayaan yang cukup</li>
-            <li>Lakukan gerakan huruf Bisindo sesuai dengan <a href="{{ url_for('bisindo') }}" class="underline hover:text-blue-900 font-semibold">panduan alfabet</a></li>
-            <li>Sistem akan mendeteksi dan menampilkan huruf secara real-time</li>
-            <li>Gunakan <strong>"Stop"</strong> untuk menghentikan atau <strong>"Reset"</strong> untuk memulai ulang</li>
-          </ol>
-        </div>
-      </div>
+    <!-- Tombol -->
+    <div class="flex gap-4 justify-center mt-4" data-aos="fade-up">
+      <button id="start-transcribe" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105 focus:ring-4 focus:ring-blue-300">
+        Mulai Transkripsi
+      </button>
+      <button id="stop-transcribe" class="bg-gray-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-gray-700 transition transform hover:scale-105">
+        Stop
+      </button>
+      <button id="reset-transcribe" class="bg-yellow-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-yellow-600 transition transform hover:scale-105">
+        Mulai Ulang
+      </button>
     </div>
 
   </div>
 </section>
 
-<!-- Enhanced JavaScript with better UX -->
+<!-- JS -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 800, once: true, offset: 50, easing: 'ease-out-cubic' });</script>
+<script>AOS.init({ duration: 400, once: true });</script>
 <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
-
-<script>
-// Enhanced UI interactions
-document.addEventListener('DOMContentLoaded', function() {
-  let letterCount = 0;
-  let lastConfidence = 0;
-  
-  // Update stats display with animation
-  function updateStats(confidence = null) {
-    const countElement = document.getElementById('word-count');
-    const accuracyElement = document.getElementById('accuracy-display');
-    
-    // Animate count update
-    const currentCount = parseInt(countElement.textContent);
-    if (letterCount > currentCount) {
-      let animatedCount = currentCount;
-      const increment = Math.ceil((letterCount - currentCount) / 10);
-      const countInterval = setInterval(() => {
-        animatedCount += increment;
-        if (animatedCount >= letterCount) {
-          animatedCount = letterCount;
-          clearInterval(countInterval);
-        }
-        countElement.textContent = animatedCount;
-      }, 50);
-    }
-    
-    if (confidence !== null) {
-      const percentage = Math.round(confidence * 100);
-      accuracyElement.textContent = percentage + '%';
-      lastConfidence = confidence;
-      
-      // Color coding based on confidence
-      accuracyElement.className = 'text-xl font-bold ' + 
-        (percentage >= 80 ? 'text-green-600' : 
-         percentage >= 60 ? 'text-yellow-600' : 'text-red-600');
-    }
-  }
-  
-  // Override the original appendTranscription function to include stats
-  const originalAppendTranscription = window.appendTranscription;
-  if (typeof originalAppendTranscription === 'function') {
-    window.appendTranscription = function(text, confidence) {
-      originalAppendTranscription(text);
-      letterCount += text.length;
-      updateStats(confidence);
-    };
-  }
-  
-  // Enhanced button click effects
-  document.querySelectorAll('.control-button').forEach(button => {
-    button.addEventListener('click', function() {
-      this.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        this.style.transform = '';
-      }, 150);
-      
-      // Add ripple effect
-      const ripple = document.createElement('div');
-      ripple.style.cssText = `
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.6);
-        transform: scale(0);
-        animation: ripple 0.6s linear;
-        pointer-events: none;
-      `;
-      
-      const rect = this.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = (rect.width / 2 - size / 2) + 'px';
-      ripple.style.top = (rect.height / 2 - size / 2) + 'px';
-      
-      this.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 600);
-    });
-  });
-  
-  // Add CSS for ripple animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes ripple {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-  
-  // Initialize stats
-  updateStats();
-});
-</script>
 
 {% endblock %}
