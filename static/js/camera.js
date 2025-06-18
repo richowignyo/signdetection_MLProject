@@ -2,6 +2,7 @@ const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 let captureInterval;
 let videoElem;
+let lastValidText = "";
 
 window.addEventListener('DOMContentLoaded', () => {
   videoElem = document.getElementById("webcam");
@@ -34,8 +35,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   resetBtn.addEventListener("click", () => {
     clearInterval(captureInterval);
-    const output = document.getElementById("transcription-output");
-    output.innerText = "";
+    document.getElementById("transcription-output").innerText = "";
+    lastValidText = "";
   });
 
   function startWebcam() {
@@ -106,12 +107,10 @@ window.addEventListener('DOMContentLoaded', () => {
         .then(data => {
           console.log("[📦 Response]", data);
           if (data.label) {
+            restorePreviousText();
             appendTranscription(data.label);
-            hideWebcamWarning(); // ✅ Hapus warning jika sukses
           } else if (data.error) {
-            console.warn("[⚠️ Prediction Warning]", data.error);
             appendErrorHint(data.error);
-            showWebcamWarning(data.error); // ⚠️ Munculkan warning
           }
         })
         .catch(err => {
@@ -125,36 +124,46 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function appendTranscription(text) {
     const output = document.getElementById('transcription-output');
-    if (output.innerText.includes("Teks hasil deteksi akan tampil di sini")) {
+
+    if (
+      output.innerText.includes("Teks hasil deteksi akan tampil di sini") ||
+      output.innerText.startsWith("⛔")
+    ) {
       output.innerText = '';
+      lastValidText = '';
     }
-    output.textContent += ' ' + text;
-    output.scrollTop = output.scrollHeight;
+
+    let i = 0;
+    const typeInterval = setInterval(() => {
+      if (i < text.length) {
+        output.textContent += text[i];
+        i++;
+        output.scrollTop = output.scrollHeight;
+      } else {
+        clearInterval(typeInterval);
+        lastValidText = output.textContent.trim();
+      }
+    }, 50);
   }
 
   function appendErrorHint(msg) {
     const output = document.getElementById('transcription-output');
-    if (output.innerText.trim() === "" || output.innerText.includes("Teks hasil deteksi")) {
-      output.innerText = "⛔ " + msg;
+    if (!output.innerText.startsWith("⛔")) {
+      lastValidText = output.innerText.trim();
     }
-  }
-
-  function showWebcamWarning(msg) {
-    const warning = document.getElementById("webcam-warning");
-    if (!warning) return;
-
-    warning.innerText = msg;
-    warning.classList.remove("hidden");
+    output.innerText = "⛔ " + msg;
 
     setTimeout(() => {
-      warning.classList.add("hidden");
-    }, 5000);
+      if (output.innerText.startsWith("⛔")) {
+        output.innerText = lastValidText;
+      }
+    }, 2500);
   }
 
-  function hideWebcamWarning() {
-    const warning = document.getElementById("webcam-warning");
-    if (warning) {
-      warning.classList.add("hidden");
+  function restorePreviousText() {
+    const output = document.getElementById('transcription-output');
+    if (output.innerText.startsWith("⛔")) {
+      output.innerText = lastValidText;
     }
   }
 });

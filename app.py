@@ -26,6 +26,7 @@ def bisindo():
 def predict():
     if 'image' not in request.files:
         return jsonify({'error': 'No image uploaded'}), 400
+
     file = request.files['image']
     if file.filename == '':
         return jsonify({'error': 'Empty filename'}), 400
@@ -34,25 +35,29 @@ def predict():
     path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(path)
 
-    result = predict_image(path)
+    try:
+        result = predict_image(path)
+    except Exception as e:
+        if os.path.exists(path):
+            os.remove(path)
+        return jsonify({'error': f'Prediction failed: {str(e)}'}), 500
+
+    if os.path.exists(path):
+        os.remove(path)
 
     if isinstance(result, tuple):
         label, confidence = result
-        os.remove(path)
         return jsonify({'label': label, 'confidence': round(confidence, 2)})
 
-    elif isinstance(result, str):
-        os.remove(path)
+    if isinstance(result, str):
         return jsonify({'error': result}), 200
 
-    result = fallback_predict_image(path)
-    os.remove(path)
-
-    if isinstance(result, tuple):
-        label, confidence = result
+    fallback_result = fallback_predict_image(path)
+    if isinstance(fallback_result, tuple):
+        label, confidence = fallback_result
         return jsonify({'label': label, 'confidence': round(confidence, 2)})
     else:
-        return jsonify({'error': 'No hand detected or confidence too low'}), 200
+        return jsonify({'error': fallback_result}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
