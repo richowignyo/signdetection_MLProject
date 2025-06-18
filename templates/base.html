@@ -3,33 +3,179 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BERSAMA</title>
+  <title>BERSAMA - Penerjemah Bahasa Isyarat</title>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/download.png') }}" />
   <style>
     body {
       font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 8px 16px;
+      border-radius: 12px;
+    }
+    
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+      border-radius: 12px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      bottom: -2px;
+      left: 50%;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    
+    .nav-link:hover::before {
+      opacity: 1;
+    }
+    
+    .nav-link:hover::after {
+      width: 80%;
+    }
+    
+    .nav-link:hover {
+      transform: translateY(-2px);
+      color: #3b82f6;
+    }
+    
+    .logo-glow {
+      filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.4));
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .logo-glow:hover {
+      filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6));
+      transform: scale(1.08) rotate(2deg);
+    }
+    
+    .mobile-menu {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mobile-menu a {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mobile-menu a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .mobile-menu a:hover::before {
+      left: 100%;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in-up {
+      animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .brand-text {
+      background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #1e3a8a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.3s ease;
+    }
+    
+    .brand-text:hover {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .divider-line {
+      background: linear-gradient(to bottom, transparent, #3b82f6, transparent);
+      transition: all 0.3s ease;
+    }
+    
+    .logo-container:hover .divider-line {
+      background: linear-gradient(to bottom, transparent, #8b5cf6, transparent);
+      transform: scaleY(1.1);
+    }
+    
+    .footer-gradient {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+      backdrop-filter: blur(15px);
     }
   </style>
 </head>
-<body class="flex flex-col min-h-screen bg-white text-gray-900">
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900">
 
   <!-- Header -->
-  <header class="bg-white border-b shadow-sm sticky top-0 z-50" x-data="{ open: false }">
+  <header class="glass-effect border-b border-blue-200 shadow-xl sticky top-0 z-50" x-data="{ open: false }">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <!-- Logo -->
-      <a href="{{ url_for('home') }}" class="flex items-center space-x-3 group">
-        <img src="{{ url_for('static', filename='avatar/logg.png') }}" alt="Logo" class="h-10 w-10 transform group-hover:scale-105 transition duration-200" />
-        <div class="w-px h-8 bg-gray-300"></div>
-        <span class="text-2xl font-extrabold text-blue-800 tracking-wide group-hover:text-blue-900 transition duration-200">BERSAMA</span>
+
+      <!-- Logo + Nama -->
+      <a href="{{ url_for('home') }}" class="flex items-center space-x-4 group logo-container">
+        <img src="{{ url_for('static', filename='avatar/logg.png') }}" alt="Logo BERSAMA" class="h-14 w-14 logo-glow" />
+        <div class="w-px h-12 divider-line"></div>
+        <div class="flex flex-col">
+          <span class="text-2xl font-extrabold brand-text tracking-wide">BERSAMA</span>
+          <span class="text-xs text-blue-600 font-medium -mt-1 transition-colors group-hover:text-purple-600">Bisindo Translator</span>
+        </div>
       </a>
 
-      <!-- Hamburger -->
-      <button @click="open = !open" class="md:hidden focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <!-- Hamburger Menu (Mobile) -->
+      <button @click="open = !open" class="md:hidden focus:outline-none p-3 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-transparent hover:border-blue-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800 transition-all duration-300" :class="{ 'rotate-90 scale-110': open }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
@@ -58,8 +204,22 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white text-gray-500 text-center py-4 border-t">
-    <p class="text-sm">&copy; 2025 BERSAMA. All rights reserved.</p>
+  <footer class="footer-gradient text-gray-600 text-center py-8 border-t border-blue-200 mt-auto shadow-lg">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+        <p class="text-sm font-medium flex items-center space-x-2">
+          <span>&copy; 2025 BERSAMA - Bahasa Isyarat Indonesia Translator</span>
+        </p>
+        <div class="flex items-center space-x-6 text-xs text-gray-500">
+          <span class="flex items-center space-x-1">
+            <span class="w-2 h-2 bg-red-400 rounded-full animate-pulse"></span>
+            <span>Made with ❤️ for accessibility</span>
+          </span>
+          <span class="hidden sm:block">•</span>
+          <span class="font-medium text-blue-600">Universitas Airlangga</span>
+        </div>
+      </div>
+    </div>
   </footer>
 
 </body>
