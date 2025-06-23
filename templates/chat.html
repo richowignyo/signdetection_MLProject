@@ -108,7 +108,7 @@ document.getElementById('upload-form').addEventListener('submit', function(e) {
   .then(res => res.json())
   .then(data => {
     if (data.label) {
-      resultBox.innerHTML = `Hasil Predict Gesture: <strong>${data.label}</strong> dengan confidence ${data.confidence}`;
+      resultBox.innerHTML = `Hasil Predict Gesture: <strong>${data.label}</strong>`;
       if (data.image_url) {
         imgEl.src = data.image_url + '?t=' + new Date().getTime();
         imgEl.classList.remove('hidden');
