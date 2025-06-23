@@ -5,6 +5,7 @@ from tensorflow.keras.models import load_model
 import pickle
 import torch
 from ultralytics import YOLO
+import uuid
 
 # Load models
 model_1hand = load_model("model/model_1hand.h5")
@@ -56,7 +57,6 @@ def predict_image(image_path):
 
     person_count = detect_people_yolo(image_for_yolo)
     if person_count > 1:
-        cv2.imwrite("debug_output.jpg", image_for_yolo)
         return "Terdeteksi lebih dari 1 orang. Harap gunakan 1 orang saja."
 
     enhanced_image = enhance_image(image_for_mp)
@@ -64,7 +64,6 @@ def predict_image(image_path):
     results = hands.process(img_rgb)
 
     if not results.multi_hand_landmarks:
-        cv2.imwrite("debug_output.jpg", image_for_mp)
         return "Tidak ada tangan terdeteksi."
 
     landmarks = results.multi_hand_landmarks
@@ -83,23 +82,24 @@ def predict_image(image_path):
 
     vec = np.array(all_coords).reshape(1, -1).astype("float32")
 
+    annotated_filename = f"static/annotated_{uuid.uuid4().hex[:8]}.jpg"
+    cv2.imwrite(annotated_filename, image_for_mp)
+
     if num_hands == 1 and vec.shape[1] == 42:
         pred = model_1hand.predict(vec, verbose=0)[0]
         label = le_1.inverse_transform([np.argmax(pred)])[0]
         conf = float(np.max(pred))
-        cv2.imwrite("debug_output.jpg", image_for_mp)
         if conf < 0.5:
             return "Prediksi tidak cukup yakin untuk 1 tangan."
-        return label, conf
+        return label, conf, annotated_filename
 
     elif num_hands == 2 and vec.shape[1] == 84:
         pred = model_2hand.predict(vec, verbose=0)[0]
         label = le_2.inverse_transform([np.argmax(pred)])[0]
         conf = float(np.max(pred))
-        cv2.imwrite("debug_output.jpg", image_for_mp)
         if conf < 0.5:
             return "Prediksi tidak cukup yakin untuk 2 tangan."
-        return label, conf
+        return label, conf, annotated_filename
 
     return "Format input tidak sesuai untuk prediksi."
 

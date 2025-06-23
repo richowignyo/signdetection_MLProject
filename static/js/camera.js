@@ -19,12 +19,12 @@ window.addEventListener('DOMContentLoaded', () => {
       startWebcam().then(() => {
         streamStarted = true;
         showCountdown(() => {
-          captureInterval = setInterval(captureImageSnapshot, 3000);
+          captureInterval = setInterval(captureImageSnapshot, 4000);
         });
       });
     } else {
       showCountdown(() => {
-        captureInterval = setInterval(captureImageSnapshot, 3000);
+        captureInterval = setInterval(captureImageSnapshot, 4000);
       });
     }
   });
@@ -105,7 +105,7 @@ window.addEventListener('DOMContentLoaded', () => {
       })
         .then(res => res.json())
         .then(data => {
-          console.log("[📦 Response]", data);
+          console.log("[\ud83d\udce6 Response]", data);
           if (data.label) {
             restorePreviousText();
             appendTranscription(data.label);
@@ -127,7 +127,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (
       output.innerText.includes("Teks hasil deteksi akan tampil di sini") ||
-      output.innerText.startsWith("⛔")
+      output.innerText.startsWith("\u26d4")
     ) {
       output.innerText = '';
       lastValidText = '';
@@ -148,13 +148,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function appendErrorHint(msg) {
     const output = document.getElementById('transcription-output');
-    if (!output.innerText.startsWith("⛔")) {
+    if (!output.innerText.startsWith("\u26d4")) {
       lastValidText = output.innerText.trim();
     }
-    output.innerText = "⛔ " + msg;
+    output.innerText = "\u26d4 " + msg;
 
     setTimeout(() => {
-      if (output.innerText.startsWith("⛔")) {
+      if (output.innerText.startsWith("\u26d4")) {
         output.innerText = lastValidText;
       }
     }, 2500);
@@ -162,7 +162,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function restorePreviousText() {
     const output = document.getElementById('transcription-output');
-    if (output.innerText.startsWith("⛔")) {
+    if (output.innerText.startsWith("\u26d4")) {
       output.innerText = lastValidText;
     }
   }

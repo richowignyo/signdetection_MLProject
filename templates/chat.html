@@ -20,9 +20,9 @@
     <div class="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto" data-aos="zoom-in">
 
       <!-- Webcam -->
-      <div id="webcam-container" class="bg-white p-6 rounded-3xl shadow-xl border-2 border-blue-100 w-full lg:w-1/2 relative">
+      <div id="webcam-container" class="bg-white p-6 rounded-3xl shadow-xl border-2 border-blue-100 w-full lg:w-1/2 h-[480px] relative">
         <p class="text-blue-700 font-bold text-xl mb-3">Webcam Aktif:</p>
-        <video id="webcam" autoplay playsinline muted class="rounded-xl w-full border shadow-md"></video>
+        <video id="webcam" autoplay playsinline muted class="rounded-xl w-full h-[400px] object-contain border shadow-md"></video>
         <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 hidden">
           <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -32,9 +32,9 @@
       </div>
 
       <!-- Transkripsi -->
-      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2">
+      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2 h-[480px]">
         <h2 class="text-blue-700 font-bold text-xl mb-3">Transkripsi Gesture:</h2>
-        <div id="transcription-output" class="text-lg text-gray-800 h-64 overflow-y-auto p-3 bg-gray-50 border rounded-lg shadow-inner">
+        <div id="transcription-output" class="text-lg text-gray-800 h-[400px] overflow-y-auto p-3 bg-gray-50 border rounded-lg shadow-inner">
           <p class="text-gray-400">Teks hasil deteksi akan tampil di sini...</p>
         </div>
       </div>
@@ -54,6 +54,30 @@
       </button>
     </div>
 
+    <!-- Upload Gambar Mode -->
+    <div class="flex flex-col lg:flex-row gap-6 max-w-6xl mx-auto mt-12" data-aos="fade-up">
+
+      <!-- Preview Gambar Upload -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2 h-[480px] flex flex-col items-center">
+        <h3 class="text-blue-700 font-bold text-xl mb-3">Gambar yang Diunggah:</h3>
+        <img id="uploaded-preview" src="" alt="Preview Gambar" class="w-full h-[400px] object-contain rounded-lg shadow border border-gray-200 hidden" />
+        <p id="upload-placeholder" class="text-gray-400">Belum ada gambar diunggah.</p>
+      </div>
+
+      <!-- Hasil Prediksi Upload -->
+      <div class="bg-white p-6 rounded-2xl shadow-lg w-full lg:w-1/2 h-[480px]">
+        <h3 class="text-blue-700 font-bold text-xl mb-3">Hasil Deteksi Gambar:</h3>
+        <form id="upload-form" class="space-y-4" enctype="multipart/form-data">
+          <input type="file" id="upload-image" name="image" accept="image/*" class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+          <button type="submit" class="w-full bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition transform hover:scale-105">
+            Kirim Gambar
+          </button>
+        </form>
+        <p id="upload-result" class="text-sm text-gray-700 mt-4"></p>
+      </div>
+
+    </div>
+
   </div>
 </section>
 
@@ -61,5 +85,44 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>AOS.init({ duration: 400, once: true });</script>
 <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+<script>
+document.getElementById('upload-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const fileInput = document.getElementById('upload-image');
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const resultBox = document.getElementById('upload-result');
+  const imgEl = document.getElementById('uploaded-preview');
+  const placeholder = document.getElementById('upload-placeholder');
+
+  resultBox.textContent = '⏳ Mengirim gambar...';
+
+  fetch('/predict', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.label) {
+      resultBox.innerHTML = `Hasil Predict Gesture: <strong>${data.label}</strong> dengan confidence ${data.confidence}`;
+      if (data.image_url) {
+        imgEl.src = data.image_url + '?t=' + new Date().getTime();
+        imgEl.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+      }
+    } else if (data.error) {
+      resultBox.textContent = `⛔ ${data.error}`;
+    }
+  })
+  .catch(err => {
+    resultBox.textContent = '⛔ Terjadi error saat mengirim gambar.';
+    console.error(err);
+  });
+});
+</script>
 
 {% endblock %}

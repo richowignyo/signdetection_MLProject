@@ -46,8 +46,16 @@ def predict():
         os.remove(path)
 
     if isinstance(result, tuple):
-        label, confidence = result
-        return jsonify({'label': label, 'confidence': round(confidence, 2)})
+        if len(result) == 3:
+            label, confidence, annotated_image = result
+            return jsonify({
+                'label': label,
+                'confidence': round(confidence, 2),
+                'image_url': '/' + annotated_image  # serve with static/
+            })
+        else:
+            label, confidence = result
+            return jsonify({'label': label, 'confidence': round(confidence, 2)})
 
     if isinstance(result, str):
         return jsonify({'error': result}), 200
