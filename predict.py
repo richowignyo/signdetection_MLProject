@@ -19,7 +19,7 @@ with open("model/label_encoder_2hand.pkl", "rb") as f:
 
 # Setup MediaPipe
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(static_image_mode=False, max_num_hands=4, min_detection_confidence=0.7)
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.7)
 mp_drawing = mp.solutions.drawing_utils
 
 # Load YOLO model for person detection
